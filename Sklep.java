@@ -13,22 +13,24 @@ import java.util.Iterator;
  * @author jpraj
  */
 public class Sklep {
-    public ArrayList<Przedmiot> wszystkie_towary = new ArrayList<Przedmiot>(); //LISTA WSZYSTKICH PRZEDMIOTOW W SKLEPIE
+    public ArrayList<Towar> wszystkie_towary = new ArrayList<Towar>(); //LISTA WSZYSTKICH PRZEDMIOTOW W SKLEPIE
     //private int[] numery_zam = new 
     
     public int getSizeSklep(){return wszystkie_towary.size();};
-    public void dodajProdukt(Przedmiot produkt){wszystkie_towary.add(produkt);};
-    public void usunProdukt(Przedmiot produkt)
+    public void dodajProdukt(Towar produkt){wszystkie_towary.add(produkt);};
+    public void usunProdukt(Towar towar)
     {
         int pozycja=0;
         for(int i = 0; i < wszystkie_towary.size(); i++)
         {
-            if(wszystkie_towary.get(i).getNazwaPrzedmiotu() == produkt.getNazwaPrzedmiotu())
+            if(wszystkie_towary.get(i).getNazwaPrzedmiotu() == towar.getNazwaPrzedmiotu())
             {pozycja = i;};
         }
         wszystkie_towary.remove(pozycja); 
     }; // usun przedmiot z koszyka;  
-    public Przedmiot wyszukajProdukt(String nazwa, String kategoria, float cena)
+    
+    //wyszukaj towar w sklepie
+    public Towar wyszukajProdukt(String nazwa, String kategoria, float cena)
     {
         int pozycja=0;
         for(int i = 0; i < wszystkie_towary.size(); i++)

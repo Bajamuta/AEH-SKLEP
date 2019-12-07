@@ -6,25 +6,17 @@
 
 package sklep;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author jpraj
  */
 
-enum Pozycja{administrator, klient};
-
-abstract class Osoba {
+public abstract class Osoba {
     protected String nazwisko;
     protected String imie;
-    protected Pozycja pozycja;
-    private Koszyk koszyk;
+    public Sklep sklep;
     
-    private static int nr_zam = 0;
-    private ArrayList<Koszyk> wszystkie_koszyki = new ArrayList<Koszyk>();
-    
-    Osoba(String imie, String nazwisko, Pozycja pozycja){ this.imie = imie; this.nazwisko = nazwisko; this.pozycja = pozycja;};
+    Osoba(String imie, String nazwisko, Sklep sklep){ this.imie = imie; this.nazwisko = nazwisko; this.sklep = sklep;};
     
     public Przedmiot wyszukajProduktNazwa(String nazwa, Sklep sklep)
     {
@@ -39,25 +31,15 @@ abstract class Osoba {
         return sklep.wyszukajProdukt("","",cena);
     };
     
+    //DO ROZWINIĘCIA GDY KLIENT MA WIELE KOSZYKOW
+    /*private Stan sprawdzStanKoszyka(int nr_zam){
+        Koszyk koszyk = Klient.koszyk;
+        return koszyk.getStanKoszyka();
+    };*/
     
-    private Stan sprawdzStanKoszyka(Koszyk koszyk){return koszyk.getStanKoszyka();}; //SPRAWDZ STAN KOSZYKA
-
-    /**
-     *
-     * @param przedmiot
-     */
-    public void dodajDoKoszyka(Przedmiot przedmiot)
+    private Stan sprawdzStanKoszyka(Koszyk koszyk)
     {
-        /*Stan st_ost = wszystkie_koszyki.get(wszystkie_koszyki.size() - 1).getStanKoszyka();
-        if(koszyk == null ||st_ost == Stan.wycofany || st_ost == Stan.oplacone){
-            nr_zam ++;
-            Koszyk koszyk = new Koszyk(nr_zam);
-            wszystkie_koszyki.add(koszyk);
-        }
-        koszyk.dodajDoKoszyka(przedmiot);*/
-        Zakup zakup = new sklep.wyszukajProdukt(przedmiot.getNazwaPrzedmiotu(), przedmiot.getKategoriaPrzedmiotu(), przedmiot.getCenaPrzedmiotu());
-    };
+        return koszyk.getStanKoszyka();
+    }
     
-    
-    public void usunKoszyka(Przedmiot przedmiot){koszyk.usunKoszyka(przedmiot);};
 }

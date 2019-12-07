@@ -8,20 +8,18 @@ package sklep;
  *
  * @author jpraj
  */
-public class Przedmiot {
+public abstract class Przedmiot {
     private String nazwa;
     private String kategoria;
     private float cena;
-    private int ilosc;
    
-    Przedmiot(String nazwa, String kategoria, float cena, int ilosc){this.nazwa = nazwa; this.kategoria = kategoria; this.cena = cena; this.ilosc = ilosc;};
+    Przedmiot(String nazwa, String kategoria, float cena){this.nazwa = nazwa; this.kategoria = kategoria; this.cena = cena;};
 
-    public void zmienCenaPrzedmiotu(float cena){this.cena = cena;};
-    public void zmienIloscPrzedmiotu(int ilosc){this.ilosc = ilosc;};
+    public abstract void zmienIloscPrzedmiotu(int ilosc);
     
     public String getNazwaPrzedmiotu(){return nazwa;};
     public String getKategoriaPrzedmiotu(){return kategoria;};
-    public int getIloscPrzedmiotu(){return ilosc;};
+    public abstract int getIloscPrzedmiotu();
     public float getCenaPrzedmiotu(){return cena;};
     
     @Override 
