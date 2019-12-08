@@ -16,16 +16,9 @@ public class Main {
     public static void main(String[] args) {
         Sklep sklep = new Sklep();
         
-        Osoba Admin = new Osoba("Kowalski", "Kazimierz", Pozycja.administrator)
-        {
-             public void utworzProdukt(String nazwa, String kategoria, float cena, int ilosc){
-                Przedmiot(nazwa, kategoria, cena, ilosc);
-            };
-        }
-        Osoba Klient = new Osoba("Jawroska", "Milena", Pozycja.klient){
-            Koszyk koszyk = new Koszyk(1234);
-        };
-    }
-    
-    
+        Administrator admin = new Administrator("Jan", "Kowalski", sklep);
+        Klient klient = new Klient("Ewa", "Kowalska", sklep);
+        
+        
+    }    
 }
