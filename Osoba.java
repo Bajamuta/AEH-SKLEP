@@ -18,17 +18,17 @@ public abstract class Osoba {
     
     Osoba(String imie, String nazwisko, Sklep sklep){ this.imie = imie; this.nazwisko = nazwisko; this.sklep = sklep;};
     
-    public Przedmiot wyszukajProduktNazwa(String nazwa, Sklep sklep)
+    public Przedmiot wyszukajTowarNazwa(String nazwa, Sklep sklep)
     {
-        return sklep.wyszukajProdukt(nazwa,"",0);
+        return sklep.wyszukajTowar(nazwa,"",0);
     };
-    public Przedmiot wyszukajProduktKategoria(String kategoria, Sklep sklep)
+    public Przedmiot wyszukajTowarKategoria(String kategoria, Sklep sklep)
     {
-        return sklep.wyszukajProdukt("",kategoria,0);
+        return sklep.wyszukajTowar("",kategoria,0);
     };
-    public Przedmiot wyszukajProduktCena(float cena, Sklep sklep)
+    public Przedmiot wyszukajTowarCena(float cena, Sklep sklep)
     {
-        return sklep.wyszukajProdukt("","",cena);
+        return sklep.wyszukajTowar("","",cena);
     };
     
     //DO ROZWINIĘCIA GDY KLIENT MA WIELE KOSZYKOW

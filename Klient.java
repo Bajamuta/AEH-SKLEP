@@ -46,4 +46,9 @@ public class Klient extends Osoba {
         koszyk.oplacKoszyk();
         System.out.println("Opłaciłeś koszyk o wartości: " + koszyk.getWartoscKoszyka());
     }
+    
+    public void pokazKoszyk()
+    {
+        koszyk.pokazKoszyk();
+    }
 }

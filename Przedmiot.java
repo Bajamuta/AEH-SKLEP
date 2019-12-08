@@ -9,9 +9,9 @@ package sklep;
  * @author jpraj
  */
 public abstract class Przedmiot {
-    private String nazwa;
-    private String kategoria;
-    private float cena;
+    public String nazwa;
+    public String kategoria;
+    public float cena;
    
     Przedmiot(String nazwa, String kategoria, float cena){this.nazwa = nazwa; this.kategoria = kategoria; this.cena = cena;};
 

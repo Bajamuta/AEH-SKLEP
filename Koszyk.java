@@ -19,14 +19,15 @@ public class Koszyk {
     private Stan stan = Stan.nieoplacone;
     private float Wartosc = 0;
     private ArrayList<Zakup> lista = new ArrayList<Zakup>(); //LISTA PRZEDMIOTOW W KOSZYKU
+    Sklep sklep;
     
     Koszyk(int nr_zam){this.nr_zam=nr_zam;}; //KONSTRUKTOR
     
     public int getNrZamKoszyk(){return nr_zam;};
-    public void wycofajKoszyk(){stan = Stan.wycofany; lista.clear(); Wartosc = 0;};  
-    public void pokazKoszyk(){System.out.println(lista);};
     public float getWartoscKoszyka(){return Wartosc;};
     public Stan getStanKoszyka(){return stan;};
+    public void wycofajKoszyk(){stan = Stan.wycofany; lista.clear(); Wartosc = 0;};  
+    public void pokazKoszyk(){System.out.println(lista);};
    
     // usun przedmiot z koszyka
     public void usunKoszyka(Przedmiot przedmiot)
@@ -61,7 +62,7 @@ public class Koszyk {
         int pozycja=0;
         for(int i = 0; i < lista.size(); i++)
         {
-            if(lista.get(i).getNazwaPrzedmiotu() == null ? zakup.getNazwaPrzedmiotu() == null : wszystkie_zakupy.get(i).getNazwaPrzedmiotu().equals(zakup.getNazwaPrzedmiotu()))
+            if(lista.get(i).equals(zakup))
             {
                 pozycja = i;
             }
@@ -104,13 +105,14 @@ public class Koszyk {
         //zmien ilosc dostepnego towaru w sklepie, poniewaz zostal kupiony!
         for(int i = 0; i < lista.size(); i++)
         {
-            for(int j = 0; j < Sklep.wszystkie_towary.size(); j++)
+            for(int j = 0; j < sklep.wszystkie_towary.size(); j++)
             {
-                Przedmiot towar = wszystkie_towary.get(j);
-                Przedmiot zakup = lista.get(i);
-                if(zakup == towar)
+                Towar towar = sklep.wszystkie_towary.get(j);
+                Zakup zakup = lista.get(i);
+                if(zakup.equals(towar))
                 {
-                    towar.zmienIloscPrzedmiotu(towar.getIloscPrzedmiotu() - zakup.getIloscPrzedmiotu());                   
+                    int ilosc = towar.getIloscPrzedmiotu() - zakup.getIloscPrzedmiotu();
+                    sklep.zmienIloscTowaru(towar, ilosc);                   
                 }
             }
         }

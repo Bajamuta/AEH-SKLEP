@@ -17,8 +17,8 @@ public class Sklep {
     //private int[] numery_zam = new 
     
     public int getSizeSklep(){return wszystkie_towary.size();};
-    public void dodajProdukt(Towar produkt){wszystkie_towary.add(produkt);};
-    public void usunProdukt(Towar towar)
+    public void dodajTowar(Towar produkt){wszystkie_towary.add(produkt);};
+    public void usunTowar(Towar towar)
     {
         int pozycja=0;
         for(int i = 0; i < wszystkie_towary.size(); i++)
@@ -30,7 +30,7 @@ public class Sklep {
     }; // usun przedmiot z koszyka;  
     
     //wyszukaj towar w sklepie
-    public Towar wyszukajProdukt(String nazwa, String kategoria, float cena)
+    public Towar wyszukajTowar(String nazwa, String kategoria, float cena)
     {
         int pozycja=0;
         for(int i = 0; i < wszystkie_towary.size(); i++)
@@ -53,4 +53,12 @@ public class Sklep {
         }
         return wszystkie_towary.get(pozycja);
     };
+    
+    //zmien ilosc towaru
+    public void zmienIloscTowaru(Towar towar, int ilosc)
+    {
+        //wyszukaj towar na liscie towarów w sklepie
+        Towar towar_zmiana = wyszukajTowar(towar.getNazwaPrzedmiotu(), towar.getKategoriaPrzedmiotu(), towar.getCenaPrzedmiotu());
+        towar_zmiana.zmienIloscPrzedmiotu(ilosc);
+    }
 }

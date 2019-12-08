@@ -17,12 +17,12 @@ public class Administrator extends Osoba {
     
     public void utworzTowar(String nazwa, String kategoria, float cena, int ilosc){
         Towar produkt = new Towar(nazwa, kategoria, cena, ilosc);
-        sklep.dodajProdukt(produkt);
+        sklep.dodajTowar(produkt);
     };
     
     public void usunTowar(Towar towar)
     {
-        sklep.usunProdukt(towar);
+        sklep.usunTowar(towar);
     }
     
     public void zmienCenaTowaru(Towar towar, float cena)

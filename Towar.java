@@ -28,6 +28,6 @@ public class Towar extends Przedmiot{
     @Override public void zmienIloscPrzedmiotu(int ilosc){this.ilosc = ilosc;};
     @Override public int getIloscPrzedmiotu(){return ilosc;};
     
-    //??jak zmienic cene tylko towaru?
+    //??jak zmienic cene tylko towaru? w klasie nadrzędnej cena musi być public
             public void zmienCenaPrzedmiotu(float cena){this.cena = cena;};
 }
