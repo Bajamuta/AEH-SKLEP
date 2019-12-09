@@ -11,20 +11,15 @@ package sklep;
 public abstract class Przedmiot {
     public String nazwa;
     public String kategoria;
-    public float cena;
+    public double cena;
    
-    Przedmiot(String nazwa, String kategoria, float cena){this.nazwa = nazwa; this.kategoria = kategoria; this.cena = cena;};
+    Przedmiot(String nazwa, String kategoria, double cena){this.nazwa = nazwa; this.kategoria = kategoria; this.cena = cena;};
 
     public abstract void zmienIloscPrzedmiotu(int ilosc);
     
     public String getNazwaPrzedmiotu(){return nazwa;};
     public String getKategoriaPrzedmiotu(){return kategoria;};
     public abstract int getIloscPrzedmiotu();
-    public float getCenaPrzedmiotu(){return cena;};
+    public double getCenaPrzedmiotu(){return cena;};
     
-    @Override 
-    public String toString(){ 
-        String string=getNazwaPrzedmiotu() +" w kategorii " + getKategoriaPrzedmiotu() + ". Ilość: " + getCenaPrzedmiotu() + ", cena: "+getCenaPrzedmiotu() + "."; 
-        return string;
-    }
 }

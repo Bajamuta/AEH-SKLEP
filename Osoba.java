@@ -18,17 +18,17 @@ public abstract class Osoba {
     
     Osoba(String imie, String nazwisko, Sklep sklep){ this.imie = imie; this.nazwisko = nazwisko; this.sklep = sklep;};
     
-    public Przedmiot wyszukajTowarNazwa(String nazwa, Sklep sklep)
+    public void wyszukajTowarNazwa(String nazwa)
     {
-        return sklep.wyszukajTowar(nazwa,"",0);
+        sklep.przegladajTowary(nazwa,null,0);
     };
-    public Przedmiot wyszukajTowarKategoria(String kategoria, Sklep sklep)
+    public void wyszukajTowarKategoria(String kategoria)
     {
-        return sklep.wyszukajTowar("",kategoria,0);
+        sklep.przegladajTowary(null,kategoria,0);
     };
-    public Przedmiot wyszukajTowarCena(float cena, Sklep sklep)
+    public void wyszukajTowarCena(double cena)
     {
-        return sklep.wyszukajTowar("","",cena);
+        sklep.przegladajTowary(null,null,cena);
     };
     
     //DO ROZWINIĘCIA GDY KLIENT MA WIELE KOSZYKOW
@@ -37,9 +37,8 @@ public abstract class Osoba {
         return koszyk.getStanKoszyka();
     };*/
     
-    private Stan sprawdzStanKoszyka(Koszyk koszyk)
+    public void sprawdzStanKoszyka(Koszyk koszyk)
     {
-        return koszyk.getStanKoszyka();
+        System.out.println(koszyk.getStanKoszyka());
     }
-    
 }

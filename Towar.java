@@ -14,7 +14,7 @@ public class Towar extends Przedmiot{
     private int ilosc;
     
     //konstruktor
-    Towar(String nazwa, String kategoria, float cena, int ilosc)
+    Towar(String nazwa, String kategoria, double cena, int ilosc)
     {
         //konstruktor klasy nadrzędnej
         super(nazwa, kategoria, cena);
@@ -29,5 +29,11 @@ public class Towar extends Przedmiot{
     @Override public int getIloscPrzedmiotu(){return ilosc;};
     
     //??jak zmienic cene tylko towaru? w klasie nadrzędnej cena musi być public
-            public void zmienCenaPrzedmiotu(float cena){this.cena = cena;};
+    public void zmienCenaPrzedmiotu(double cena){this.cena = cena;};
+            
+    @Override 
+    public String toString(){ 
+        String string=getNazwaPrzedmiotu() +" w kategorii " + getKategoriaPrzedmiotu() + ", Ilość: " + getIloscPrzedmiotu() + ", cena: "+getCenaPrzedmiotu() + "zł."; 
+        return string;
+    }
 }

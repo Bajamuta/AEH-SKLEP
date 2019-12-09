@@ -12,20 +12,20 @@ package sklep;
 public class Administrator extends Osoba {
     Administrator(String imie, String nazwisko, Sklep sklep)
     {
-        super(imie,nazwisko, sklep);
+        super(imie,nazwisko,sklep);
     }
     
-    public void utworzTowar(String nazwa, String kategoria, float cena, int ilosc){
+    public void utworzTowar(String nazwa, String kategoria, double cena, int ilosc){
         Towar produkt = new Towar(nazwa, kategoria, cena, ilosc);
         sklep.dodajTowar(produkt);
     };
     
-    public void usunTowar(Towar towar)
+    public void usunTowar(String nazwa)
     {
-        sklep.usunTowar(towar);
+        sklep.usunTowar(nazwa);
     }
     
-    public void zmienCenaTowaru(Towar towar, float cena)
+    public void zmienCenaTowaru(Towar towar, double cena)
     {
         towar.zmienCenaPrzedmiotu(cena);
     };

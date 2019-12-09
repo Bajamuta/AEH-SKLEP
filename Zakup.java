@@ -14,13 +14,13 @@ public class Zakup extends Przedmiot {
     private int ilosc;
         
     //konstruktory
-    Zakup(String nazwa, String kategoria, float cena, int ilosc)
+    Zakup(String nazwa, String kategoria, double cena, int ilosc)
     {
         //konstruktor klasy nadrzędnej
         super(nazwa, kategoria, cena);
         this.ilosc = ilosc;
     }
-    Zakup(String nazwa, String kategoria, float cena)
+    Zakup(String nazwa, String kategoria, double cena)
     {
         //konstruktor klasy nadrzędnej
         super(nazwa, kategoria, cena);
@@ -33,4 +33,10 @@ public class Zakup extends Przedmiot {
      */
     @Override public void zmienIloscPrzedmiotu(int ilosc){this.ilosc = ilosc;};
     @Override public int getIloscPrzedmiotu(){return ilosc;};
+    
+    @Override 
+    public String toString(){ 
+        String string="Koszyk zawiera: " + getNazwaPrzedmiotu() +" w kategorii " + getKategoriaPrzedmiotu() + ". Ilość: " + getIloscPrzedmiotu() + ", cena: "+getCenaPrzedmiotu() + "zł."; 
+        return string;
+    }
 }

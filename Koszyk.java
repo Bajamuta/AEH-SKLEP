@@ -6,8 +6,6 @@
 package sklep;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-
 enum Stan{nieoplacone, oplacone, wycofany}; //STAN KOSZYKA
 
 /**
@@ -17,38 +15,39 @@ enum Stan{nieoplacone, oplacone, wycofany}; //STAN KOSZYKA
 public class Koszyk {
     private int nr_zam;
     private Stan stan = Stan.nieoplacone;
-    private float Wartosc = 0;
+    private double Wartosc = 0;
     private ArrayList<Zakup> lista = new ArrayList<Zakup>(); //LISTA PRZEDMIOTOW W KOSZYKU
     Sklep sklep;
     
-    Koszyk(int nr_zam){this.nr_zam=nr_zam;}; //KONSTRUKTOR
+    //KONSTRUKTOR
+    Koszyk(int nr_zam, Sklep sklep){
+        this.nr_zam=nr_zam;
+        this.sklep = sklep;
+        //System.out.println("Koszyk utworzony \n");
+    }; 
     
     public int getNrZamKoszyk(){return nr_zam;};
-    public float getWartoscKoszyka(){return Wartosc;};
+    public double getWartoscKoszyka(){return Wartosc;};
     public Stan getStanKoszyka(){return stan;};
     public void wycofajKoszyk(){stan = Stan.wycofany; lista.clear(); Wartosc = 0;};  
-    public void pokazKoszyk(){System.out.println(lista);};
-   
-    // usun przedmiot z koszyka
-    public void usunKoszyka(Przedmiot przedmiot)
-    {
-        int pozycja=0;
-        for(int i = 0; i < lista.size(); i++)
+    public void pokazKoszyk(){
+        if(lista != null)
         {
-            if(lista.get(i).getNazwaPrzedmiotu() == null ? przedmiot.getNazwaPrzedmiotu() == null : lista.get(i).getNazwaPrzedmiotu().equals(przedmiot.getNazwaPrzedmiotu()))
-            {pozycja = i;};
+            System.out.println(lista);
         }
-        lista.remove(pozycja); 
-        Wartosc = Wartosc - przedmiot.getCenaPrzedmiotu();
-    }; 
-   
+        else //throw new RuntimeException("Koszyk jest pusty.");
+        {
+            System.out.println("Koszyk jest pusty");
+        }
+    };
+       
     //sprawdz czy przedmiot jest w koszyku
     private boolean czyWkoszyku(Przedmiot zakup)
     {
         boolean test = false;
         for(int i = 0; i < lista.size(); i++)
         {
-            if(lista.get(i) == zakup)
+            if(lista.get(i).nazwa == null ? zakup.nazwa == null : lista.get(i).nazwa.equals(zakup.nazwa))
             {
                 test = true;
             }
@@ -57,30 +56,51 @@ public class Koszyk {
     };
     
     //znajdz zakup w koszyku
-    private Zakup znajdzWkoszyku(Przedmiot zakup)
+    private int znajdzWkoszyku(Zakup zakup)
     {
         int pozycja=0;
+        //System.out.println("Szukam: "+zakup);
         for(int i = 0; i < lista.size(); i++)
         {
-            if(lista.get(i).equals(zakup))
+            //System.out.println(i + ": "+lista.get(i));
+            //System.out.println(i + ": "+lista.get(i).equals(zakup)+"");
+            //NIE MOŻNA BEZPOŚREDNIO POROWNAC BO ILOSC INNA!!!
+            //System.out.println(i + ": " + lista.get(i).nazwa == null ? zakup.nazwa == null : lista.get(i).nazwa.equals(zakup.nazwa));
+            if(lista.get(i).nazwa == null ? zakup.nazwa == null : lista.get(i).nazwa.equals(zakup.nazwa))
             {
                 pozycja = i;
+                //System.out.println("Jestem tutaj");
+            }
+            else if(i == lista.size())
+            {
+                pozycja = -1;
+                //System.out.println("Jestem tam");
             }
         }
-        return lista.get(pozycja);
+        return pozycja;
     }
     
-    public void dodajDoKoszyka(Towar towar)
+    public void dodajDoKoszyka(String nazwa, String kategoria)
     {
+        //System.out.println("poczatek\n");
+        int pozycja_w_sklepie = sklep.wyszukajTowar(nazwa, kategoria, 0);
+        System.out.println(pozycja_w_sklepie);
+        Towar towar = sklep.getTowar(pozycja_w_sklepie);
+        System.out.println(towar);
+        Zakup zakup = new Zakup(towar.nazwa, towar.kategoria, towar.cena);
         //sprawdz ilosc dostepnych sztuk towaru
         int ilosc_towaru = towar.getIloscPrzedmiotu();
+        //System.out.println(ilosc_towaru);
+        
         if(ilosc_towaru>0)
         {
+            //System.out.println("dalej...\n");
            //sprawdz czy zakup jest juz w koszyku
-            if(czyWkoszyku(towar))
+            if(czyWkoszyku(zakup))
             {
-                Zakup zakup = znajdzWkoszyku(towar);
-                int ilosc_zakupu = zakup.getIloscPrzedmiotu();
+                //System.out.println("czy w koszyku?\n");
+                int pozycja_w_koszyku = znajdzWkoszyku(zakup);
+                int ilosc_zakupu = lista.get(pozycja_w_koszyku).getIloscPrzedmiotu();
                 //sprawdz czy mozna dodac wiecej sztuk zakupu
                 if(ilosc_zakupu < ilosc_towaru)
                 {
@@ -94,11 +114,40 @@ public class Koszyk {
             }
             else // przedmiotu nie ma jeszcze w koszyku
             {
-                Zakup zakup = new Zakup(towar.getNazwaPrzedmiotu(), towar.getKategoriaPrzedmiotu(), towar.getCenaPrzedmiotu());
+                //System.out.println("koniec...\n");
                 lista.add(zakup); Wartosc = Wartosc + zakup.getCenaPrzedmiotu();
             }
         }
     }; //dodaj przedmiot do koszyka
+    
+    // usun przedmiot z koszyka
+    public void usunKoszyka(String nazwa)
+    {
+        int pozycja_w_sklepie = sklep.wyszukajTowar(nazwa, "", 0);
+        if(pozycja_w_sklepie >=0)
+        {
+            Towar towar = sklep.getTowar(pozycja_w_sklepie);
+            System.out.println("Czy w sklepie jest "+nazwa+": "+towar);
+            Zakup zakup = new Zakup(towar.nazwa, towar.kategoria, towar.cena);
+            System.out.println("chce usunac: "+zakup+"");
+            int pozycja = znajdzWkoszyku(zakup);
+            //System.out.println("Nr pozycji: " + pozycja + "\n");
+            if(czyWkoszyku(lista.get(pozycja)))
+            {
+                //System.out.println(lista.get(pozycja)+"\n");
+                    lista.remove(pozycja);
+                    //Wartosc = Wartosc - lista.get(pozycja).cena;
+            }
+            else //throw new RuntimeException("Brak podanej pozycji w koszyku!\n");  
+            {
+                System.out.println("Nie ma takiej pozycji w koszyku.");
+            }
+        }
+        else// throw new RuntimeException("Nie ma takiego przedmiotu w sklepie!\n");
+        {
+            System.out.println("Nie ma takiej pozycji w sklepie.");
+        }
+    };     
     
     public void oplacKoszyk(){
         stan = Stan.oplacone;
@@ -109,10 +158,10 @@ public class Koszyk {
             {
                 Towar towar = sklep.wszystkie_towary.get(j);
                 Zakup zakup = lista.get(i);
-                if(zakup.equals(towar))
+                if(zakup.nazwa == null ? towar.nazwa == null : zakup.nazwa.equals(towar.nazwa))
                 {
                     int ilosc = towar.getIloscPrzedmiotu() - zakup.getIloscPrzedmiotu();
-                    sklep.zmienIloscTowaru(towar, ilosc);                   
+                    towar.zmienIloscPrzedmiotu(ilosc);                   
                 }
             }
         }
