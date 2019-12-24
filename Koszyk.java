@@ -28,8 +28,19 @@ public class Koszyk {
     
     public int getNrZamKoszyk(){return nr_zam;};
     public double getWartoscKoszyka(){return Wartosc;};
+
     public Stan getStanKoszyka(){return stan;};
-    public void wycofajKoszyk(){stan = Stan.wycofany; lista.clear(); Wartosc = 0;};  
+    
+    public void wycofajKoszyk(){
+        stan = Stan.wycofany; 
+        Wartosc = 0;
+        for(Zakup i: lista)
+        {
+            sklep.zwrocWycofane(i.getNazwaPrzedmiotu(), i.getIloscPrzedmiotu());
+        }
+        lista.clear(); 
+    }; 
+    
     public void pokazKoszyk(){
         if(lista != null)
         {
@@ -84,13 +95,13 @@ public class Koszyk {
     {
         //System.out.println("poczatek\n");
         int pozycja_w_sklepie = sklep.wyszukajTowar(nazwa, kategoria, 0);
-        System.out.println(pozycja_w_sklepie);
+        //System.out.println(pozycja_w_sklepie);
         Towar towar = sklep.getTowar(pozycja_w_sklepie);
-        System.out.println(towar);
+        System.out.println("Dodaję: "+towar);
         Zakup zakup = new Zakup(towar.nazwa, towar.kategoria, towar.cena);
         //sprawdz ilosc dostepnych sztuk towaru
         int ilosc_towaru = towar.getIloscPrzedmiotu();
-        //System.out.println(ilosc_towaru);
+        System.out.println("Dostępna ilość:"+ilosc_towaru);
         
         if(ilosc_towaru>0)
         {
@@ -104,8 +115,11 @@ public class Koszyk {
                 //sprawdz czy mozna dodac wiecej sztuk zakupu
                 if(ilosc_zakupu < ilosc_towaru)
                 {
+                    //System.out.println("tutaj");
                     int ilosc = ilosc_zakupu + 1;
-                    zakup.zmienIloscPrzedmiotu(ilosc);
+                    lista.get(znajdzWkoszyku(zakup)).zmienIloscPrzedmiotu(ilosc);
+                    Wartosc = Wartosc + zakup.getCenaPrzedmiotu();
+                    sklep.zmniejszWsklepie(nazwa);
                 }
                 else
                 {
@@ -117,6 +131,10 @@ public class Koszyk {
                 //System.out.println("koniec...\n");
                 lista.add(zakup); Wartosc = Wartosc + zakup.getCenaPrzedmiotu();
             }
+        }
+        else
+        {
+            System.out.println("Nie wystarczająca ilość towaru!");
         }
     }; //dodaj przedmiot do koszyka
     
@@ -137,6 +155,8 @@ public class Koszyk {
                 //System.out.println(lista.get(pozycja)+"\n");
                     lista.remove(pozycja);
                     //Wartosc = Wartosc - lista.get(pozycja).cena;
+                    sklep.zwrocWycofane(nazwa, 1);
+                    Wartosc = Wartosc - zakup.getCenaPrzedmiotu();
             }
             else //throw new RuntimeException("Brak podanej pozycji w koszyku!\n");  
             {
@@ -145,7 +165,7 @@ public class Koszyk {
         }
         else// throw new RuntimeException("Nie ma takiego przedmiotu w sklepie!\n");
         {
-            System.out.println("Nie ma takiej pozycji w sklepie.");
+            System.out.println("Nie ma takiego towaru!");
         }
     };     
     

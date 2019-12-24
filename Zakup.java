@@ -31,7 +31,10 @@ public class Zakup extends Przedmiot {
      *
      * @param ilosc
      */
-    @Override public void zmienIloscPrzedmiotu(int ilosc){this.ilosc = ilosc;};
+    @Override public void zmienIloscPrzedmiotu(int ilosc){
+        //System.out.println("dalej...");
+        this.ilosc = ilosc;
+    };
     @Override public int getIloscPrzedmiotu(){return ilosc;};
     
     @Override 

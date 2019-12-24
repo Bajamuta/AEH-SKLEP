@@ -130,6 +130,21 @@ public class Sklep {
         else{System.out.println("Nie ma takiego towaru w sklepie!");}        
     }; 
     
+    public void zmniejszWsklepie(String nazwa)
+    {
+        int pozycja = wyszukajTowar(nazwa,"",0);
+        int ilosc = wszystkie_towary.get(pozycja).getIloscPrzedmiotu()-1;
+        wszystkie_towary.get(pozycja).zmienIloscPrzedmiotu(ilosc);
+    }
+    
+    public void zwrocWycofane(String nazwa, int ilosc_zwrotu)
+    {
+        //System.out.println("Zwracam...");
+        int pozycja = wyszukajTowar(nazwa,"",0);
+        int ilosc = wszystkie_towary.get(pozycja).getIloscPrzedmiotu()+ilosc_zwrotu;
+        wszystkie_towary.get(pozycja).zmienIloscPrzedmiotu(ilosc);
+    }
+    
     //?? JAK DODAć to?
     @Override 
     public String toString(){ 

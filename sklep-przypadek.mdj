@@ -40,7 +40,7 @@
 							},
 							"font": "Arial;13;0",
 							"left": 520,
-							"top": 80,
+							"top": 8,
 							"width": 328,
 							"height": 97
 						},
@@ -52,7 +52,7 @@
 							},
 							"font": "Arial;13;0",
 							"left": 616,
-							"top": 96,
+							"top": 24,
 							"width": 138,
 							"height": 64,
 							"text": "Dodawanie przedmiotów do koszyka"
@@ -65,7 +65,7 @@
 							},
 							"font": "Arial;13;0",
 							"left": 516,
-							"top": 190,
+							"top": 118,
 							"width": 328,
 							"height": 97
 						},
@@ -77,7 +77,7 @@
 							},
 							"font": "Arial;13;0",
 							"left": 608,
-							"top": 208,
+							"top": 136,
 							"width": 141,
 							"height": 64,
 							"text": "Usuwanie przedmiotów z koszyka"
@@ -90,7 +90,7 @@
 							},
 							"font": "Arial;13;0",
 							"left": 516,
-							"top": 302,
+							"top": 230,
 							"width": 328,
 							"height": 97
 						},
@@ -102,7 +102,7 @@
 							},
 							"font": "Arial;13;0",
 							"left": 616,
-							"top": 336,
+							"top": 264,
 							"width": 125,
 							"height": 33,
 							"text": "Opłacanie koszyka"
@@ -115,7 +115,7 @@
 							},
 							"font": "Arial;13;0",
 							"left": 508,
-							"top": 534,
+							"top": 606,
 							"width": 328,
 							"height": 97
 						},
@@ -127,7 +127,7 @@
 							},
 							"font": "Arial;13;0",
 							"left": 600,
-							"top": 560,
+							"top": 632,
 							"width": 129,
 							"height": 38,
 							"text": "Wyszukiwanie przedmiotów"
@@ -140,7 +140,7 @@
 							},
 							"font": "Arial;13;0",
 							"left": 508,
-							"top": 414,
+							"top": 342,
 							"width": 328,
 							"height": 97
 						},
@@ -152,7 +152,7 @@
 							},
 							"font": "Arial;13;0",
 							"left": 584,
-							"top": 440,
+							"top": 368,
 							"width": 169,
 							"height": 38,
 							"text": "Sprawdzanie koszyka (stan, wartość, zawartość)"
@@ -396,7 +396,7 @@
 								"$ref": "AAAAAAFunGSeEAe5TY0="
 							},
 							"lineStyle": 1,
-							"points": "264:120;519:125"
+							"points": "264:112;519:78"
 						},
 						{
 							"_type": "UMLNoteLinkView",
@@ -412,7 +412,7 @@
 								"$ref": "AAAAAAFunGSeEAe5TY0="
 							},
 							"lineStyle": 1,
-							"points": "264:132;515:196"
+							"points": "264:124;515:149"
 						},
 						{
 							"_type": "UMLNoteLinkView",
@@ -428,7 +428,7 @@
 								"$ref": "AAAAAAFunGSeEAe5TY0="
 							},
 							"lineStyle": 1,
-							"points": "264:143;581:301"
+							"points": "264:136;536:229"
 						},
 						{
 							"_type": "UMLNoteLinkView",
@@ -444,7 +444,7 @@
 								"$ref": "AAAAAAFunGSeEAe5TY0="
 							},
 							"lineStyle": 1,
-							"points": "264:143;581:301"
+							"points": "264:136;536:229"
 						},
 						{
 							"_type": "UMLNoteLinkView",
@@ -460,7 +460,7 @@
 								"$ref": "AAAAAAFunGSeEAe5TY0="
 							},
 							"lineStyle": 1,
-							"points": "264:156;606:413"
+							"points": "264:148;589:341"
 						},
 						{
 							"_type": "UMLNoteLinkView",
@@ -476,7 +476,7 @@
 								"$ref": "AAAAAAFunG1tnBE3dxg="
 							},
 							"lineStyle": 1,
-							"points": "217:220;610:533"
+							"points": "217:220;620:605"
 						},
 						{
 							"_type": "UMLNoteLinkView",
@@ -492,7 +492,7 @@
 								"$ref": "AAAAAAFunHCAiRFnnzg="
 							},
 							"lineStyle": 1,
-							"points": "1159:778;793:631"
+							"points": "1159:784;836:698"
 						},
 						{
 							"_type": "UMLNoteLinkView",
@@ -549,8 +549,8 @@
 								"$ref": "AAAAAAFF+qBtyKM79qY="
 							},
 							"font": "Arial;13;0",
-							"left": 904,
-							"top": 72,
+							"left": 920,
+							"top": 48,
 							"width": 161,
 							"height": 25,
 							"text": "PRZYPADEK UŻYCIA"
@@ -569,7 +569,61 @@
 								"$ref": "AAAAAAFunHhihxHiGRQ="
 							},
 							"lineStyle": 1,
-							"points": "903:96;848:104"
+							"points": "919:59;848:58"
+						},
+						{
+							"_type": "UMLTextView",
+							"_id": "AAAAAAFvLJf0rnWStFc=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"font": "Arial;13;0",
+							"left": 586,
+							"top": 489,
+							"width": 169,
+							"height": 38,
+							"text": "Sprawdzanie koszyka (stan, wartość, zawartość)"
+						},
+						{
+							"_type": "EllipseView",
+							"_id": "AAAAAAFvLJf0rnWTu4g=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"font": "Arial;13;0",
+							"left": 510,
+							"top": 463,
+							"width": 328,
+							"height": 97
+						},
+						{
+							"_type": "UMLNoteLinkView",
+							"_id": "AAAAAAFvLJf0rnWU/bw=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"font": "Arial;13;0",
+							"head": {
+								"$ref": "AAAAAAFvLJf0rnWTu4g="
+							},
+							"tail": {
+								"$ref": "AAAAAAFunGSeEAe5TY0="
+							},
+							"lineStyle": 1,
+							"points": "263:160;616:462"
+						},
+						{
+							"_type": "UMLTextView",
+							"_id": "AAAAAAFvLJhDxnWdS0g=",
+							"_parent": {
+								"$ref": "AAAAAAFF+qBtyKM79qY="
+							},
+							"font": "Arial;13;0",
+							"left": 592,
+							"top": 496,
+							"width": 208,
+							"height": 25,
+							"text": "wycofanie koszyka"
 						}
 					]
 				},
