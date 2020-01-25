@@ -27,6 +27,7 @@ public class Koszyk {
     }; 
     
     public int getNrZamKoszyk(){return nr_zam;};
+    public ArrayList<Zakup> getListaZakupow(){return lista;};
     public double getWartoscKoszyka(){return Wartosc;};
 
     public Stan getStanKoszyka(){return stan;};

@@ -26,7 +26,7 @@ public class Sklep {
         int pozycja=0;
         for(int i = 0; i < wszystkie_towary.size(); i++)
         {
-            if(nazwa != null) 
+            if(!nazwa.isEmpty()) 
             {
                 //System.out.println("tutaj:");
                 if(wszystkie_towary.get(i).getNazwaPrzedmiotu() == null ? nazwa == null : wszystkie_towary.get(i).getNazwaPrzedmiotu().equals(nazwa))
@@ -41,7 +41,7 @@ public class Sklep {
                     //System.out.println("A może tu.");
                 }
             }
-            else if (kategoria != null)
+            else if (!kategoria.isEmpty())
             {
                 if(wszystkie_towary.get(i).getKategoriaPrzedmiotu() == null ? kategoria == null : wszystkie_towary.get(i).getKategoriaPrzedmiotu().equals(kategoria))
                 {
@@ -60,8 +60,10 @@ public class Sklep {
                     pozycja = i;
                     break;
                 }
-                else
-                {pozycja = -1;}
+            }
+            else
+            {
+                pozycja = -1;
             }
         }
         return pozycja;        

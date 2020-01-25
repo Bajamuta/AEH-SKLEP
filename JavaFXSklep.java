@@ -36,7 +36,7 @@ import javafx.util.Callback;
 public class JavaFXSklep extends Application {
     
     Stage window;
-    Scene logowanie, menu_klient, menu_admin, zarzadzanie;
+    Scene logowanie, menu_klient, menu_admin, zarzadzanie, zarzadzaj_koszyk, wyszukaj_klient;
     Sklep sklep;
     Administrator admin;
     Klient klient;
@@ -66,15 +66,6 @@ public class JavaFXSklep extends Application {
         log.getChildren().addAll(uzytk, zaloguj, info);
         layout_logowanie.getChildren().add(log);
         logowanie = new Scene(layout_logowanie, 600, 600);
-        
-        //klient menu
-        Button wyszukaj = new Button("Wyszukaj produkt");
-        Button zamowienia = new Button("Moje zamowienia");
-        Button wyloguj_klient = new Button("Wyloguj");
-        wyloguj_klient.setOnAction(e -> window.setScene(logowanie));
-        VBox layout_menu_klient = new VBox(20);
-        layout_menu_klient.getChildren().addAll(wyszukaj, zamowienia, wyloguj_klient);
-        menu_klient = new Scene(layout_menu_klient, 600, 600);
         
         //admin zarzadzanie
         sklep.dodajTowar(new Towar("jabłko", "owoce", 1.2, 1));
@@ -147,9 +138,6 @@ public class JavaFXSklep extends Application {
         menu_admin = new Scene(layout_menu_admin, 600, 600);
         
         
-
-        
-        
         zaloguj.setOnAction((ActionEvent event) -> {
             System.out.println(uzytkownik.getText());
             if(uzytkownik.getText().equals("admin"))
@@ -193,7 +181,7 @@ public class JavaFXSklep extends Application {
             {
                 try
                 {
-                    Towar towar = admin.wyszukajTowar(nazwa.getText(), kategoria.getText(), parseDouble(cena.getText()));
+                    Towar towar = sklep.getTowar(sklep.wyszukajTowar(nazwa.getText(), kategoria.getText(), parseDouble(cena.getText())));
                     znaleziony_towar.setText(towar.nazwa + " w kategorii " + towar.kategoria + " w cenie " + towar.cena + ", dostępna ilość: " + towar.getIloscPrzedmiotu());
                     zwieksz_ilosc.setVisible(true);
                     zmniejsz_ilosc.setVisible(true);
@@ -267,9 +255,75 @@ public class JavaFXSklep extends Application {
             wszystkie_towary.setText(pokazSklep(towary));
         });
         
+        
+        //klient zamowienia
+        klient.dodajDoKoszyka("jabłko");
+        //TableView<Towar> table = new TableView<>();
+        ObservableList<Zakup> zamowienie = FXCollections.observableArrayList();
+        zamowienie.setAll(klient.getKoszyk().getListaZakupow());
+        Label zamowienie_klienta = new Label();
+        zamowienie_klienta.setText(pokazZakupy(zamowienie));
+        Button powrot = new Button("Powrót");
+        powrot.setOnAction(e -> window.setScene(menu_klient));
+        
+        VBox layout_koszyk = new VBox(30);
+        layout_koszyk.getChildren().addAll(zamowienie_klienta, powrot);
+        zarzadzaj_koszyk = new Scene(layout_koszyk, 900, 600);
+        
+        //klient wyszukaj produkt
+        Button powrot_menu = new Button("Powrót");
+        powrot_menu.setOnAction(e -> window.setScene(menu_klient));
+        Button kup = new Button("Kup");
+        kup.setVisible(false);
+        kup.setOnAction(e -> 
+        {
+            klient.dodajDoKoszyka(nazwa.getText());
+            zamowienie.setAll(klient.getKoszyk().getListaZakupow());
+            zamowienie_klienta.setText(pokazZakupy(zamowienie));
+        });
+        Button znajdz_zakup = new Button("Znajdż");
+        HBox wyszukaj_przedmiot = new HBox(20);
+        wyszukaj_przedmiot.setPrefHeight(20);
+        wyszukaj_przedmiot.getChildren().addAll(nazwa_label, nazwa, kategoria_label, kategoria, cena_label, cena, znajdz_zakup);
+        HBox akcja_zakup = new HBox(30);
+        akcja_zakup.getChildren().addAll(znaleziony_towar, kup);
+        VBox layout_wyszukaj = new VBox(30);
+        layout_wyszukaj.getChildren().addAll(wszystkie_towary, wyszukaj_przedmiot, akcja_zakup, powrot_menu);
+        wyszukaj_klient = new Scene(layout_wyszukaj, 900, 600);
+        
+        //klient menu
+        Button wyszukaj = new Button("Wyszukaj produkt");
+        wyszukaj.setOnAction(e -> window.setScene(wyszukaj_klient));
+        Button zamowienia = new Button("Moje zamowienia");
+        zamowienia.setOnAction(e -> window.setScene(zarzadzaj_koszyk));
+        Button wyloguj_klient = new Button("Wyloguj");
+        wyloguj_klient.setOnAction(e -> window.setScene(logowanie));
+        VBox layout_menu_klient = new VBox(20);
+        layout_menu_klient.getChildren().addAll(wyszukaj, zamowienia, wyloguj_klient);
+        menu_klient = new Scene(layout_menu_klient, 600, 600);
+        
+        znajdz_zakup.setOnAction((ActionEvent event) -> {
+            if(!nazwa.getText().isEmpty() && !kategoria.getText().isEmpty() && !cena.getText().isEmpty())
+            {
+                try
+                {
+                    Towar towar = sklep.getTowar(sklep.wyszukajTowar(nazwa.getText(), kategoria.getText(), parseDouble(cena.getText())));
+                    znaleziony_towar.setText(towar.nazwa + " w kategorii " + towar.kategoria + " w cenie " + towar.cena + ", dostępna ilość: " + towar.getIloscPrzedmiotu());
+                    kup.setVisible(true);
+                }
+                catch(ArrayIndexOutOfBoundsException exception)
+                {
+                    znaleziony_towar.setText("Brak podanego przedmiotu w sklepie.");
+                }
+            }
+            else
+            {
+                znaleziony_towar.setText("Podaj wszystkie dane");
+            }
+        });
        
         
-        window.setScene(zarzadzanie);
+        window.setScene(logowanie);
         window.setTitle("Sklep");
         window.show();
     }    
@@ -283,6 +337,17 @@ public class JavaFXSklep extends Application {
                 sklep = sklep + towary.get(i).nazwa + " w: " + towary.get(i).kategoria + ", cena: " + towary.get(i).cena + ", dostępne: " + towary.get(i).getIloscPrzedmiotu() + "\n"  ;
             }
             return sklep;
+        };
+     
+     public String pokazZakupy(ObservableList<Zakup> zakupy)
+        {
+            int r = zakupy.size();
+            String koszyk = "W koszyku znajdują się: \n";
+            for(int i=0; i< r; i++)
+            {
+                koszyk = koszyk + zakupy.get(i).nazwa + " w: " + zakupy.get(i).kategoria + ", cena: " + zakupy.get(i).cena + ", dostępne: " + zakupy.get(i).getIloscPrzedmiotu() + "\n"  ;
+            }
+            return koszyk;
         };
     
 }
