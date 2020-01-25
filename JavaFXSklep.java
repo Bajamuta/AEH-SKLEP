@@ -7,6 +7,8 @@ package javafxsklep;
 
 import static java.lang.Double.parseDouble;
 import javafx.application.Application;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -76,15 +79,16 @@ public class JavaFXSklep extends Application {
         //admin zarzadzanie
         sklep.dodajTowar(new Towar("jabłko", "owoce", 1.2, 1));
         sklep.dodajTowar(new Towar("masło", "nabiał", 2.3, 1));
-        TableView table = new TableView();
+        //TableView<Towar> table = new TableView<>();
         ObservableList<Towar> towary = FXCollections.observableArrayList();
         towary.setAll(sklep.wszystkie_towary);
-        table.setItems(towary);
+        /*table.setItems(towary);
         table.refresh();
         System.out.println(towary);
-        TableColumn nazwaColumn = new TableColumn("Nazwa");
+        TableColumn nazwaColumn = new TableColumn<Towar, String>("Nazwa");
         nazwaColumn.setMinWidth(200);
-        nazwaColumn.setCellValueFactory(new PropertyValueFactory<>("nazwa"));
+        //nazwaColumn.setCellValueFactory(new PropertyValueFactory<>("nazwa"));
+        nazwaColumn.setCellValueFactory(cellData -> cellData.getValue().getNazwaPrzedmiotu().asObject() );
         TableColumn kategoriaColumn = new TableColumn("Kategoria");
         kategoriaColumn.setMinWidth(200);
         kategoriaColumn.setCellValueFactory(new PropertyValueFactory<>("kategoria"));
@@ -95,7 +99,10 @@ public class JavaFXSklep extends Application {
         iloscColumn.setMinWidth(200);
         iloscColumn.setCellValueFactory(new PropertyValueFactory<>("ilosc"));
         table.getColumns().addAll(nazwaColumn, kategoriaColumn, cenaColumn, iloscColumn);
-        table.setEditable(true);
+        table.setEditable(true);*/
+        
+        Label wszystkie_towary = new Label();
+        wszystkie_towary.setText(pokazSklep(towary));
        
         Label nazwa_label = new Label("nazwa");
         TextArea nazwa = new TextArea();
@@ -119,15 +126,15 @@ public class JavaFXSklep extends Application {
         Button usun_towar = new Button("Usuń");
         usun_towar.setVisible(false);
         
-        VBox tabela_towarow = new VBox();
+        //VBox tabela_towarow = new VBox();
         HBox przyciski_towar = new HBox(20);
         HBox wyszukiwanie_towar = new HBox(20);
         wyszukiwanie_towar.getChildren().addAll(znaleziony_towar,zwieksz_ilosc,zmniejsz_ilosc, usun_towar);
         przyciski_towar.setPrefHeight(20);
         przyciski_towar.getChildren().addAll(nazwa_label, nazwa, kategoria_label, kategoria, cena_label, cena, dodaj_towar, znajdz_towar, wyczysc);
-        tabela_towarow.getChildren().addAll(table);
+        //tabela_towarow.getChildren().addAll(table);
         VBox layout_zarzadzanie = new VBox(30);
-        layout_zarzadzanie.getChildren().addAll(tabela_towarow, przyciski_towar, wyszukiwanie_towar);
+        layout_zarzadzanie.getChildren().addAll(wszystkie_towary, przyciski_towar, wyszukiwanie_towar);
         zarzadzanie = new Scene(layout_zarzadzanie, 900, 600);
         
         //admin menu
@@ -169,10 +176,11 @@ public class JavaFXSklep extends Application {
                 cena.clear();
                 znaleziony_towar.setText("Dodano do sklepu.");
                 towary.setAll(sklep.wszystkie_towary);
-                table.setItems(towary);
+                /*table.setItems(towary);
                 table.refresh();
-                System.out.println(towary + "\n VS \n");
+                System.out.println(towary + "\n VS \n");*/
                 sklep.pokazTowary();
+                wszystkie_towary.setText(pokazSklep(towary));
             }
             else
             {
@@ -218,8 +226,9 @@ public class JavaFXSklep extends Application {
             Towar towar = admin.wyszukajTowar(nazwa.getText(), kategoria.getText(), parseDouble(cena.getText()));
             znaleziony_towar.setText(towar.nazwa + " w kategorii " + towar.kategoria + " w cenie " + towar.cena + ", dostępna ilość: " + towar.getIloscPrzedmiotu());
             towary.setAll(sklep.wszystkie_towary);
-            table.setItems(towary);
-            table.refresh();
+            /*table.setItems(towary);
+            table.refresh();*/
+            wszystkie_towary.setText(pokazSklep(towary));
         });
         
         zmniejsz_ilosc.setOnAction((ActionEvent event) ->{
@@ -230,8 +239,9 @@ public class JavaFXSklep extends Application {
                 sklep.getTowar(sklep.wyszukajTowar(nazwa.getText(), kategoria.getText(), parseDouble(cena.getText()))).zmienIloscPrzedmiotu(ilosc);
                 znaleziony_towar.setText(towar.nazwa + " w kategorii " + towar.kategoria + " w cenie " + towar.cena + ", dostępna ilość: " + towar.getIloscPrzedmiotu());
                 towary.setAll(sklep.wszystkie_towary);
-                table.setItems(towary);
-                table.refresh();
+                /*table.setItems(towary);
+                table.refresh();*/
+                wszystkie_towary.setText(pokazSklep(towary));
             }
             else
             {
@@ -250,15 +260,29 @@ public class JavaFXSklep extends Application {
             zmniejsz_ilosc.setVisible(false);
             usun_towar.setVisible(false);
             towary.setAll(sklep.wszystkie_towary);
-            table.setItems(towary);
+            /*table.setItems(towary);
             table.refresh();
-            System.out.println(towary + "\n VS \n");
+            System.out.println(towary + "\n VS \n");*/
             sklep.pokazTowary();
+            wszystkie_towary.setText(pokazSklep(towary));
         });
+        
+       
         
         window.setScene(zarzadzanie);
         window.setTitle("Sklep");
         window.show();
     }    
+    
+     public String pokazSklep(ObservableList<Towar> towary)
+        {
+            int r = towary.size();
+            String sklep = "W sklepie znajdują się: \n";
+            for(int i=0; i< r; i++)
+            {
+                sklep = sklep + towary.get(i).nazwa + " w: " + towary.get(i).kategoria + ", cena: " + towary.get(i).cena + ", dostępne: " + towary.get(i).getIloscPrzedmiotu() + "\n"  ;
+            }
+            return sklep;
+        };
     
 }
