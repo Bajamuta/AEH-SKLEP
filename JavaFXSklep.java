@@ -294,6 +294,7 @@ public class JavaFXSklep extends Application {
         nazwa_z.setPrefWidth(100);
         Label kategoria_label_z = new Label("kategoria");
         Label znalezione_z = new Label();
+        Label wartosc_koszyka = new Label("WARTOŚĆ KOSZYKA WYNOSI: "+String.valueOf(klient.getKoszyk().getWartoscKoszyka()));
         //checkbox!!
         TextArea kategoria_z = new TextArea();
         kategoria_z.setPrefWidth(100);
@@ -318,7 +319,7 @@ public class JavaFXSklep extends Application {
         akcja_zamowienie.getChildren().addAll(znalezione_z, usun_z_koszyka);
         
         VBox layout_koszyk = new VBox(30);
-        layout_koszyk.getChildren().addAll(tabela_zamowienie, wyszukaj_przedmiot_z, akcja_zamowienie, powrot, oplac);
+        layout_koszyk.getChildren().addAll(tabela_zamowienie, wyszukaj_przedmiot_z, akcja_zamowienie, powrot, wartosc_koszyka, oplac);
         zarzadzaj_koszyk = new Scene(layout_koszyk, 900, 600);
         
         //klient wyszukaj produkt  
@@ -478,6 +479,23 @@ public class JavaFXSklep extends Application {
             {
                 znalezione_z.setText("Podaj wszystkie dane");
             }
+        });
+        
+        oplac.setOnAction((ActionEvent event) ->{
+            try
+                {
+                    klient.getKoszyk().oplacKoszyk();
+                    zamowienie.setAll(klient.getKoszyk().getListaZakupow());
+                    towary.setAll(sklep.wszystkie_towary);
+                    table_klient_sklep.setItems(towary);
+                    table_klient_sklep.refresh();
+                    znalezione_z.setText("Opłacono zamówienie.");
+                 }
+                catch(Exception e)
+                {
+                    
+                }
+            
         });
        
         

@@ -185,16 +185,7 @@ public class Koszyk {
         //zmien ilosc dostepnego towaru w sklepie, poniewaz zostal kupiony!
         for(int i = 0; i < lista.size(); i++)
         {
-            for(int j = 0; j < sklep.wszystkie_towary.size(); j++)
-            {
-                Towar towar = sklep.wszystkie_towary.get(j);
-                Zakup zakup = lista.get(i);
-                if(zakup.nazwa == null ? towar.nazwa == null : zakup.nazwa.equals(towar.nazwa))
-                {
-                    int ilosc = towar.getIloscPrzedmiotu() - zakup.getIloscPrzedmiotu();
-                    towar.zmienIloscPrzedmiotu(ilosc);                   
-                }
-            }
+            usunKoszyka(lista.get(i).nazwa);
         }
     };
     
