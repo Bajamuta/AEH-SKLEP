@@ -74,22 +74,29 @@ public class JavaFXSklep extends Application {
         menu_klient = new Scene(layout_menu_klient, 600, 600);
         
         //admin zarzadzanie
+        sklep.dodajTowar(new Towar("jabłko", "owoce", 1.2, 1));
+        sklep.dodajTowar(new Towar("masło", "nabiał", 2.3, 1));
         TableView table = new TableView();
-        //ObservableList<Towar> towary = FXCollections.observableArrayList();
-        //towary.add(new Towar("jablko", "owoce", 12.3,1));
-        //towary.add(new Towar("masło", "nabiał", 3.2, 1));
-        TableColumn<Towar,String> nazwaColumn = new TableColumn<>("Nazwa");
+        ObservableList<Towar> towary = FXCollections.observableArrayList();
+        towary.setAll(sklep.wszystkie_towary);
+        table.setItems(towary);
+        table.refresh();
+        System.out.println(towary);
+        TableColumn nazwaColumn = new TableColumn("Nazwa");
         nazwaColumn.setMinWidth(200);
         nazwaColumn.setCellValueFactory(new PropertyValueFactory<>("nazwa"));
-        TableColumn<Towar,String> kategoriaColumn = new TableColumn<>("Kategoria");
+        TableColumn kategoriaColumn = new TableColumn("Kategoria");
         kategoriaColumn.setMinWidth(200);
         kategoriaColumn.setCellValueFactory(new PropertyValueFactory<>("kategoria"));
-        TableColumn<Towar,Double> cenaColumn = new TableColumn<>("Cena");
+        TableColumn cenaColumn = new TableColumn("Cena");
         cenaColumn.setMinWidth(50);
         cenaColumn.setCellValueFactory(new PropertyValueFactory<>("cena"));
-        TableColumn<Towar,String> iloscColumn = new TableColumn<>("Dostępna ilość");
+        TableColumn iloscColumn = new TableColumn("Dostępna ilość");
         iloscColumn.setMinWidth(200);
         iloscColumn.setCellValueFactory(new PropertyValueFactory<>("ilosc"));
+        table.getColumns().addAll(nazwaColumn, kategoriaColumn, cenaColumn, iloscColumn);
+        table.setEditable(true);
+       
         Label nazwa_label = new Label("nazwa");
         TextArea nazwa = new TextArea();
         nazwa.setPrefWidth(100);
@@ -102,16 +109,25 @@ public class JavaFXSklep extends Application {
         cena.setPrefWidth(30);
         //!!sprawdzenie czy double
         Button dodaj_towar = new Button("Dodaj");
+        Button znajdz_towar = new Button("Wyszukaj");
+        Button wyczysc = new Button("Wyczyść");
+        Label znaleziony_towar = new Label();
+        Button zwieksz_ilosc = new Button("+");
+        zwieksz_ilosc.setVisible(false);
+        Button zmniejsz_ilosc = new Button(" - ");
+        zmniejsz_ilosc.setVisible(false);
+        Button usun_towar = new Button("Usuń");
+        usun_towar.setVisible(false);
         
-        ObservableList<Towar> towary = FXCollections.observableArrayList(sklep.getWszystkieTowary());
-        table.getColumns().addAll(nazwaColumn, kategoriaColumn, cenaColumn, iloscColumn);
         VBox tabela_towarow = new VBox();
         HBox przyciski_towar = new HBox(20);
+        HBox wyszukiwanie_towar = new HBox(20);
+        wyszukiwanie_towar.getChildren().addAll(znaleziony_towar,zwieksz_ilosc,zmniejsz_ilosc, usun_towar);
         przyciski_towar.setPrefHeight(20);
-        przyciski_towar.getChildren().addAll(nazwa_label, nazwa, kategoria_label, kategoria, cena_label, cena, dodaj_towar);
+        przyciski_towar.getChildren().addAll(nazwa_label, nazwa, kategoria_label, kategoria, cena_label, cena, dodaj_towar, znajdz_towar, wyczysc);
         tabela_towarow.getChildren().addAll(table);
         VBox layout_zarzadzanie = new VBox(30);
-        layout_zarzadzanie.getChildren().addAll(tabela_towarow, przyciski_towar);
+        layout_zarzadzanie.getChildren().addAll(tabela_towarow, przyciski_towar, wyszukiwanie_towar);
         zarzadzanie = new Scene(layout_zarzadzanie, 900, 600);
         
         //admin menu
@@ -127,47 +143,120 @@ public class JavaFXSklep extends Application {
 
         
         
-        zaloguj.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println(uzytkownik.getText());
-                if(uzytkownik.getText().equals("admin"))
-                {
-                    window.setScene(menu_admin);
-                }
-                else if(uzytkownik.getText().equals("klient"))
-                {
-                    window.setScene(menu_klient);
-                }
-                else
-                {
-                    info.setText("Bledny uzytkownik");
-                }
+        zaloguj.setOnAction((ActionEvent event) -> {
+            System.out.println(uzytkownik.getText());
+            if(uzytkownik.getText().equals("admin"))
+            {
+                window.setScene(menu_admin);
+            }
+            else if(uzytkownik.getText().equals("klient"))
+            {
+                window.setScene(menu_klient);
+            }
+            else
+            {
+                info.setText("Bledny uzytkownik");
             }
         });
         
-        //dodaj_towar.setOnAction(e -> admin.utworzTowar(nazwa.getText(), kategoria.getText(), parseDouble(cena.getText()), 1));
-        //dodaj_towar.setOnAction(e -> sklep.dodajTowar(new Towar(nazwa.getText(),kategoria.getText(),parseDouble(cena.getText()),1)));
-        
-        dodaj_towar.setOnAction(new EventHandler<ActionEvent>(){
-            @Override
-            public void handle(ActionEvent event) {
+        dodaj_towar.setOnAction((ActionEvent event) -> {
+            if(!nazwa.getText().isEmpty() && !kategoria.getText().isEmpty() && !cena.getText().isEmpty())
+            {
                 admin.utworzTowar(nazwa.getText(), kategoria.getText(), parseDouble(cena.getText()),1);
-                //WYCZYŚCIC TEXTAREA I ODSWIEZ WIDOK!!!
+                //ODSWIEZ WIDOK!!!
                 nazwa.clear();
                 kategoria.clear();
                 cena.clear();
-                System.out.println("Dodano: "+nazwa.getText());
-                System.out.println("Sklep:");
-                System.out.println(sklep.getWszystkieTowary());
+                znaleziony_towar.setText("Dodano do sklepu.");
+                towary.setAll(sklep.wszystkie_towary);
                 table.setItems(towary);
                 table.refresh();
+                System.out.println(towary + "\n VS \n");
+                sklep.pokazTowary();
+            }
+            else
+            {
+                znaleziony_towar.setText("Podaj wszystkie dane");
             }
         });
         
+        znajdz_towar.setOnAction((ActionEvent event) -> {
+            if(!nazwa.getText().isEmpty() && !kategoria.getText().isEmpty() && !cena.getText().isEmpty())
+            {
+                try
+                {
+                    Towar towar = admin.wyszukajTowar(nazwa.getText(), kategoria.getText(), parseDouble(cena.getText()));
+                    znaleziony_towar.setText(towar.nazwa + " w kategorii " + towar.kategoria + " w cenie " + towar.cena + ", dostępna ilość: " + towar.getIloscPrzedmiotu());
+                    zwieksz_ilosc.setVisible(true);
+                    zmniejsz_ilosc.setVisible(true);
+                    usun_towar.setVisible(true);
+                }
+                catch(ArrayIndexOutOfBoundsException exception)
+                {
+                    znaleziony_towar.setText("Brak podanego przedmiotu w sklepie.");
+                }
+            }
+            else
+            {
+                znaleziony_towar.setText("Podaj wszystkie dane");
+            }
+        });
         
+        wyczysc.setOnAction((ActionEvent event) ->{
+            nazwa.clear();
+            kategoria.clear();
+            cena.clear();
+            zwieksz_ilosc.setVisible(false);
+            zmniejsz_ilosc.setVisible(false);
+            usun_towar.setVisible(false);
+            znaleziony_towar.setText("");
+        });
         
-        window.setScene(logowanie);
+        zwieksz_ilosc.setOnAction((ActionEvent event) ->{
+            int ilosc = sklep.getTowar(sklep.wyszukajTowar(nazwa.getText(), kategoria.getText(), parseDouble(cena.getText()))).getIloscPrzedmiotu()+1;
+            sklep.getTowar(sklep.wyszukajTowar(nazwa.getText(), kategoria.getText(), parseDouble(cena.getText()))).zmienIloscPrzedmiotu(ilosc);
+            Towar towar = admin.wyszukajTowar(nazwa.getText(), kategoria.getText(), parseDouble(cena.getText()));
+            znaleziony_towar.setText(towar.nazwa + " w kategorii " + towar.kategoria + " w cenie " + towar.cena + ", dostępna ilość: " + towar.getIloscPrzedmiotu());
+            towary.setAll(sklep.wszystkie_towary);
+            table.setItems(towary);
+            table.refresh();
+        });
+        
+        zmniejsz_ilosc.setOnAction((ActionEvent event) ->{
+            int ilosc = sklep.getTowar(sklep.wyszukajTowar(nazwa.getText(), kategoria.getText(), parseDouble(cena.getText()))).getIloscPrzedmiotu()-1;
+            Towar towar = admin.wyszukajTowar(nazwa.getText(), kategoria.getText(), parseDouble(cena.getText()));
+            if(ilosc >=0)
+            {
+                sklep.getTowar(sklep.wyszukajTowar(nazwa.getText(), kategoria.getText(), parseDouble(cena.getText()))).zmienIloscPrzedmiotu(ilosc);
+                znaleziony_towar.setText(towar.nazwa + " w kategorii " + towar.kategoria + " w cenie " + towar.cena + ", dostępna ilość: " + towar.getIloscPrzedmiotu());
+                towary.setAll(sklep.wszystkie_towary);
+                table.setItems(towary);
+                table.refresh();
+            }
+            else
+            {
+                znaleziony_towar.setText("Nie można więcej odjąć produktu!\n" + towar.nazwa + " w kategorii " + towar.kategoria + " w cenie " + towar.cena + ", dostępna ilość: " + towar.getIloscPrzedmiotu());
+                
+            }
+        });       
+        
+        usun_towar.setOnAction((ActionEvent event) ->{
+            admin.usunTowar(nazwa.getText());
+            znaleziony_towar.setText("Towar usunięty ze sklpeu.");
+            nazwa.clear();
+            kategoria.clear();
+            cena.clear();
+            zwieksz_ilosc.setVisible(false);
+            zmniejsz_ilosc.setVisible(false);
+            usun_towar.setVisible(false);
+            towary.setAll(sklep.wszystkie_towary);
+            table.setItems(towary);
+            table.refresh();
+            System.out.println(towary + "\n VS \n");
+            sklep.pokazTowary();
+        });
+        
+        window.setScene(zarzadzanie);
         window.setTitle("Sklep");
         window.show();
     }    
