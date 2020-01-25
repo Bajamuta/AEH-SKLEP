@@ -18,18 +18,25 @@ public abstract class Osoba {
     
     Osoba(String imie, String nazwisko, Sklep sklep){ this.imie = imie; this.nazwisko = nazwisko; this.sklep = sklep;};
     
-    public void wyszukajTowarNazwa(String nazwa)
+    public void wypiszTowarNazwa(String nazwa)
     {
         sklep.przegladajTowary(nazwa,null,0);
     };
-    public void wyszukajTowarKategoria(String kategoria)
+    public void wypiszTowarKategoria(String kategoria)
     {
         sklep.przegladajTowary(null,kategoria,0);
     };
-    public void wyszukajTowarCena(double cena)
+    public void wypiszTowarCena(double cena)
     {
         sklep.przegladajTowary(null,null,cena);
     };
+    
+    public Towar wyszukajTowar(String nazwa, String kategoria, double cena)
+    {
+        Towar towar = sklep.getTowar(sklep.wyszukajTowar(nazwa, kategoria, cena));
+        towar.zmienIloscPrzedmiotu(sklep.getTowar(sklep.wyszukajTowar(nazwa, kategoria, cena)).getIloscPrzedmiotu());
+        return towar;
+    }
     
     //DO ROZWINIĘCIA GDY KLIENT MA WIELE KOSZYKOW
     /*private Stan sprawdzStanKoszyka(int nr_zam){
