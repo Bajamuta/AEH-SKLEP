@@ -409,27 +409,6 @@ public class JavaFXSklep extends Application {
             }
         });
         
-        znajdz_zakup_z.setOnAction((ActionEvent event) -> {
-            if(!nazwa_z.getText().isEmpty() && !kategoria_z.getText().isEmpty() && !cena_z.getText().isEmpty())
-            {
-                try
-                {
-                    int pozycja = klient.getKoszyk().znajdzWkoszyku(new Zakup(nazwa_z.getText(), kategoria_z.getText(), parseDouble(cena_z.getText())));
-                    Zakup zakup = klient.getKoszyk().getZakup(pozycja);
-                    znalezione_z.setText("Pozycja: "+pozycja + " " + zakup.nazwa + " w kategorii " + zakup.kategoria + " w cenie " + zakup.cena + ", dostępna ilość: " + zakup.getIloscPrzedmiotu());
-                    usun_z_koszyka.setVisible(true);
-                }
-                catch(ArrayIndexOutOfBoundsException exception)
-                {
-                    znalezione_z.setText("Brak podanego przedmiotu w zamówieniu.");
-                }
-            }
-            else
-            {
-                znalezione_z.setText("Podaj wszystkie dane");
-            }
-        });
-        
         kup.setOnAction(e -> 
         {
             Towar towar = sklep.getTowar(sklep.wyszukajTowar(nazwa2.getText(), kategoria2.getText(), parseDouble(cena2.getText())));
@@ -452,6 +431,53 @@ public class JavaFXSklep extends Application {
                 znaleziony_zakup.setText("Brak dostępnych produktów");
             }
             kup.setVisible(false);
+        });
+        
+        znajdz_zakup_z.setOnAction((ActionEvent event) -> {
+            if(!nazwa_z.getText().isEmpty() && !kategoria_z.getText().isEmpty() && !cena_z.getText().isEmpty())
+            {
+                try
+                {
+                    int pozycja = klient.getKoszyk().znajdzWkoszyku(new Zakup(nazwa_z.getText(), kategoria_z.getText(), parseDouble(cena_z.getText())));
+                    Zakup zakup = klient.getKoszyk().getZakup(pozycja);
+                    znalezione_z.setText("Pozycja: "+pozycja + " " + zakup.nazwa + " w kategorii " + zakup.kategoria + " w cenie " + zakup.cena + ", dostępna ilość: " + zakup.getIloscPrzedmiotu());
+                    usun_z_koszyka.setVisible(true);
+                }
+                catch(ArrayIndexOutOfBoundsException exception)
+                {
+                    znalezione_z.setText("Brak podanego przedmiotu w zamówieniu.");
+                }
+            }
+            else
+            {
+                znalezione_z.setText("Podaj wszystkie dane");
+            }
+        });
+        
+        usun_z_koszyka.setOnAction((ActionEvent event) -> {
+            if(!nazwa_z.getText().isEmpty() && !kategoria_z.getText().isEmpty() && !cena_z.getText().isEmpty())
+            {
+                try
+                {
+                    int pozycja = sklep.wyszukajTowar(nazwa_z.getText(), kategoria_z.getText(), parseDouble(cena_z.getText()));
+                    klient.usunKoszyka(nazwa_z.getText());
+                    sklep.zwrocWycofane(nazwa_z.getText(), pozycja);
+                    zamowienie.setAll(klient.getKoszyk().getListaZakupow());
+                    towary.setAll(sklep.wszystkie_towary);
+                    table_klient_sklep.setItems(towary);
+                    table_klient_sklep.refresh();
+                    znalezione_z.setText("Usunięto z koszyka.");
+                }
+                catch(ArrayIndexOutOfBoundsException exception)
+                {
+                    znalezione_z.setText("Brak podanego przedmiotu w zamówieniu.");
+                }
+                usun_z_koszyka.setVisible(false);
+            }
+            else
+            {
+                znalezione_z.setText("Podaj wszystkie dane");
+            }
         });
        
         
