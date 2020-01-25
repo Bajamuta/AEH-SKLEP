@@ -32,6 +32,11 @@ public class Koszyk {
 
     public Stan getStanKoszyka(){return stan;};
     
+    public Zakup getZakup(int pozycja)
+    {
+        return lista.get(pozycja);
+    };
+    
     public void wycofajKoszyk(){
         stan = Stan.wycofany; 
         Wartosc = 0;
@@ -68,7 +73,7 @@ public class Koszyk {
     };
     
     //znajdz zakup w koszyku
-    private int znajdzWkoszyku(Zakup zakup)
+    public int znajdzWkoszyku(Zakup zakup)
     {
         int pozycja=0;
         //System.out.println("Szukam: "+zakup);
@@ -77,7 +82,7 @@ public class Koszyk {
             //System.out.println(i + ": "+lista.get(i));
             //System.out.println(i + ": "+lista.get(i).equals(zakup)+"");
             //NIE MOŻNA BEZPOŚREDNIO POROWNAC BO ILOSC INNA!!!
-            //System.out.println(i + ": " + lista.get(i).nazwa == null ? zakup.nazwa == null : lista.get(i).nazwa.equals(zakup.nazwa));
+            System.out.println(i + ": " + lista.get(i).nazwa == null ? zakup.nazwa == null : lista.get(i).nazwa.equals(zakup.nazwa));
             if(lista.get(i).nazwa == null ? zakup.nazwa == null : lista.get(i).nazwa.equals(zakup.nazwa))
             {
                 pozycja = i;
@@ -88,14 +93,19 @@ public class Koszyk {
                 pozycja = -1;
                 //System.out.println("Jestem tam");
             }
+            else
+            {
+                pozycja = -1;
+                //System.out.println("not found");   
+            }
         }
         return pozycja;
     }
     
-    public void dodajDoKoszyka(String nazwa, String kategoria)
+    public void dodajDoKoszyka(String nazwa, String kategoria, Double cena)
     {
         //System.out.println("poczatek\n");
-        int pozycja_w_sklepie = sklep.wyszukajTowar(nazwa, kategoria, 0);
+        int pozycja_w_sklepie = sklep.wyszukajTowar(nazwa, kategoria, cena);
         //System.out.println(pozycja_w_sklepie);
         Towar towar = sklep.getTowar(pozycja_w_sklepie);
         System.out.println("Dodaję: "+towar);
@@ -120,7 +130,7 @@ public class Koszyk {
                     int ilosc = ilosc_zakupu + 1;
                     lista.get(znajdzWkoszyku(zakup)).zmienIloscPrzedmiotu(ilosc);
                     Wartosc = Wartosc + zakup.getCenaPrzedmiotu();
-                    sklep.zmniejszWsklepie(nazwa);
+                    sklep.zmniejszWsklepie(nazwa,kategoria,cena);
                 }
                 else
                 {

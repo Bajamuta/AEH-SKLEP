@@ -27,6 +27,14 @@ public class Zakup extends Przedmiot {
         this.ilosc = 1;
     }
     
+    public int getIlosc() {
+        return ilosc;
+    }
+
+    public void setIlosc(int ilosc) {
+        this.ilosc = ilosc;
+    }
+    
     /**
      *
      * @param ilosc

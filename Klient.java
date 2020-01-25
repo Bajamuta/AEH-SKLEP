@@ -28,7 +28,7 @@ public class Klient extends Osoba {
         //Towar towar = sklep.wyszukajProdukt(przedmiot.getNazwaPrzedmiotu(), przedmiot.getKategoriaPrzedmiotu(), przedmiot.getCenaPrzedmiotu());
          //Zakup zakup = new Zakup(towar.getKategoriaPrzedmiotu(), towar.getKategoriaPrzedmiotu(), towar.getCenaPrzedmiotu());
        
-    public void dodajDoKoszyka(String nazwa)
+    public void dodajDoKoszyka(String nazwa, String kategoria, Double cena)
     {
         //System.out.println("test...\n");
         //Zakup zakup = new Zakup(nazwa, kategoria, 0);
@@ -41,7 +41,7 @@ public class Klient extends Osoba {
             koszyk_klienta = new Koszyk(nr_zam, sklep);
             
         }
-         koszyk_klienta.dodajDoKoszyka(nazwa, "");
+         koszyk_klienta.dodajDoKoszyka(nazwa, kategoria, cena);
     };
     
     public void usunKoszyka(String nazwa){

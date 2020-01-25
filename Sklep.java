@@ -137,9 +137,9 @@ public class Sklep {
         else{System.out.println("Nie ma takiego towaru w sklepie!");}        
     }; 
     
-    public void zmniejszWsklepie(String nazwa)
+    public void zmniejszWsklepie(String nazwa, String kategoria, Double cena)
     {
-        int pozycja = wyszukajTowar(nazwa,"",0);
+        int pozycja = wyszukajTowar(nazwa,kategoria,cena);
         int ilosc = wszystkie_towary.get(pozycja).getIloscPrzedmiotu()-1;
         wszystkie_towary.get(pozycja).zmienIloscPrzedmiotu(ilosc);
     }
