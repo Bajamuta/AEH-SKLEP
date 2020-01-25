@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sklep;
+package javafxsklep;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -120,6 +120,11 @@ public class Sklep {
     public void pokazTowary()
     {
         System.out.println(wszystkie_towary);
+    }
+    
+    public ArrayList<Towar> getWszystkieTowary()
+    {
+        return wszystkie_towary;
     }
     
     // usun przedmiot z koszyka;

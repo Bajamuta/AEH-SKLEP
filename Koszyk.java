@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sklep;
+package javafxsklep;
 
 import java.util.ArrayList;
 enum Stan{nieoplacone, oplacone, wycofany}; //STAN KOSZYKA

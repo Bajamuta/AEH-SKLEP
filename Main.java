@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sklep;
+package javafxsklep;
 
 /**
  *
@@ -15,7 +15,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Sklep sklep = new Sklep();
+        /*Sklep sklep = new Sklep();
         
         Administrator admin = new Administrator("Jan", "Kowalski", sklep);
         Klient klient = new Klient("Ewa", "Kowalska", sklep);
@@ -95,6 +95,6 @@ public class Main {
         klient2.wycofajKoszyk();
         klient2.sprawdzStanKoszyka(klient2.getKoszyk());
         klient2.pokazKoszyk();
-        sklep.pokazTowary();
+        sklep.pokazTowary();*/
     }    
 }
