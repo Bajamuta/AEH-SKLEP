@@ -61,7 +61,7 @@ public class JavaFXSklep extends Application {
         Label info = new Label("Prosze podac uzytkownika: klient lub admin");
         VBox log = new VBox(20);
         VBox uzytk = new VBox();
-        uzytk.setPrefHeight(20);
+        uzytk.setPrefHeight(15);
         uzytk.getChildren().add(uzytkownik);
         log.getChildren().addAll(uzytk, zaloguj, info);
         layout_logowanie.getChildren().add(log);
@@ -128,6 +128,7 @@ public class JavaFXSklep extends Application {
         
         VBox tabela_towarow = new VBox();
         HBox przyciski_towar = new HBox(20);
+        przyciski_towar.setPrefHeight(15);
         HBox wyszukiwanie_towar = new HBox(20);
         wyszukiwanie_towar.getChildren().addAll(znaleziony_towar,zwieksz_ilosc,zmniejsz_ilosc, usun_towar);
         //przyciski_towar.setPrefHeight(20);
@@ -302,9 +303,14 @@ public class JavaFXSklep extends Application {
         TextArea cena_z = new TextArea();
         cena_z.setPrefWidth(30);
         Button znajdz_zakup_z = new Button("Znajdż");
+        Button wyczysc_z = new Button("Wyczyść");
+        Button zwieksz_ilosc_z = new Button("+");
+        zwieksz_ilosc_z.setVisible(false);
+        Button zmniejsz_ilosc_z = new Button(" - ");
+        zmniejsz_ilosc_z.setVisible(false);
         HBox wyszukaj_przedmiot_z = new HBox(20);
         wyszukaj_przedmiot_z.setPrefHeight(20);
-        wyszukaj_przedmiot_z.getChildren().addAll(nazwa_label_z, nazwa_z, kategoria_label_z, kategoria_z, cena_label_z, cena_z, znajdz_zakup_z);
+        wyszukaj_przedmiot_z.getChildren().addAll(nazwa_label_z, nazwa_z, kategoria_label_z, kategoria_z, cena_label_z, cena_z, znajdz_zakup_z, wyczysc_z);
         
         Label zamowienie_klienta = new Label();
         zamowienie_klienta.setText(pokazZakupy(zamowienie));
@@ -316,7 +322,7 @@ public class JavaFXSklep extends Application {
         Button oplac = new Button("OPŁAĆ");
         
         HBox akcja_zamowienie = new HBox(30);
-        akcja_zamowienie.getChildren().addAll(znalezione_z, usun_z_koszyka);
+        akcja_zamowienie.getChildren().addAll(znalezione_z,zwieksz_ilosc_z, zmniejsz_ilosc_z, usun_z_koszyka);
         
         VBox layout_koszyk = new VBox(30);
         layout_koszyk.getChildren().addAll(tabela_zamowienie, wyszukaj_przedmiot_z, akcja_zamowienie, powrot, wartosc_koszyka, oplac);
@@ -381,7 +387,9 @@ public class JavaFXSklep extends Application {
         {
             zamowienie_klienta.setText(pokazZakupy(zamowienie));
             znaleziony_zakup.setText("");
-            kup.setVisible(false);
+            zwieksz_ilosc_z.setVisible(false);
+            zmniejsz_ilosc_z.setVisible(false);
+            usun_z_koszyka.setVisible(false);
             window.setScene(zarzadzaj_koszyk); 
         });
         Button wyloguj_klient = new Button("Wyloguj");
@@ -419,6 +427,8 @@ public class JavaFXSklep extends Application {
                 klient.dodajDoKoszyka(nazwa2.getText(), kategoria2.getText(), parseDouble(cena2.getText()));
                 sklep.zmniejszWsklepie(nazwa2.getText(), kategoria2.getText(), parseDouble(cena2.getText()));
                 zamowienie.setAll(klient.getKoszyk().getListaZakupow());
+                table_zamowienie.setItems(zamowienie);
+                table_zamowienie.refresh();
                 towary.setAll(sklep.wszystkie_towary);
                 table_klient_sklep.setItems(towary);
                 table_klient_sklep.refresh();
@@ -441,7 +451,9 @@ public class JavaFXSklep extends Application {
                 {
                     int pozycja = klient.getKoszyk().znajdzWkoszyku(new Zakup(nazwa_z.getText(), kategoria_z.getText(), parseDouble(cena_z.getText())));
                     Zakup zakup = klient.getKoszyk().getZakup(pozycja);
-                    znalezione_z.setText("Pozycja: "+pozycja + " " + zakup.nazwa + " w kategorii " + zakup.kategoria + " w cenie " + zakup.cena + ", dostępna ilość: " + zakup.getIloscPrzedmiotu());
+                    znalezione_z.setText(zakup.nazwa + " w kategorii " + zakup.kategoria + " w cenie " + zakup.cena + ", zamówione: " + zakup.getIloscPrzedmiotu());
+                    zwieksz_ilosc_z.setVisible(true);
+                    zmniejsz_ilosc_z.setVisible(true);
                     usun_z_koszyka.setVisible(true);
                 }
                 catch(ArrayIndexOutOfBoundsException exception)
@@ -455,6 +467,70 @@ public class JavaFXSklep extends Application {
             }
         });
         
+        wyczysc_z.setOnAction((ActionEvent event) ->{
+            nazwa_z.clear();
+            kategoria_z.clear();
+            cena_z.clear();
+            zwieksz_ilosc_z.setVisible(false);
+            zmniejsz_ilosc_z.setVisible(false);
+            usun_z_koszyka.setVisible(false);
+            znalezione_z.setText("");
+        });
+        
+        zwieksz_ilosc_z.setOnAction((ActionEvent event) ->{
+            Towar towar = sklep.getTowar(sklep.wyszukajTowar(nazwa_z.getText(), kategoria_z.getText(), parseDouble(cena_z.getText())));
+            int dostepne = towar.getIloscPrzedmiotu();
+            int pozycja = klient.getKoszyk().znajdzWkoszyku(new Zakup(nazwa_z.getText(), kategoria_z.getText(), parseDouble(cena_z.getText())));
+            Zakup zakup = klient.getKoszyk().getZakup(pozycja);
+            if(dostepne >0)
+            {
+                sklep.zmniejszWsklepie(nazwa_z.getText(), kategoria_z.getText(), parseDouble(cena_z.getText()));
+                zakup.zmienIloscPrzedmiotu(zakup.getIloscPrzedmiotu()+1);
+                znalezione_z.setText(zakup.nazwa + " w kategorii " + zakup.kategoria + " w cenie " + zakup.cena + ", zamówione: " + zakup.getIloscPrzedmiotu());
+                zamowienie.setAll(klient.getKoszyk().getListaZakupow());
+                towary.setAll(sklep.wszystkie_towary);
+                table_klient_sklep.setItems(towary);
+                table_klient_sklep.refresh();
+                table_zamowienie.setItems(zamowienie);
+                table_zamowienie.refresh();
+            }
+            else
+            {
+                znalezione_z.setText("Brak dostępnych produktów w sklepie! "+zakup.nazwa + " w kategorii " + zakup.kategoria + " w cenie " + zakup.cena + ", zamówione: " + zakup.getIloscPrzedmiotu());
+            }
+        });
+        
+        zmniejsz_ilosc_z.setOnAction((ActionEvent event) ->{
+            int pozycja = klient.getKoszyk().znajdzWkoszyku(new Zakup(nazwa_z.getText(), kategoria_z.getText(), parseDouble(cena_z.getText())));
+            Zakup zakup = klient.getKoszyk().getZakup(pozycja);
+            int ilosc_zam = zakup.getIloscPrzedmiotu();
+            int ilosc_sklep = sklep.getTowar(sklep.wyszukajTowar(nazwa_z.getText(), kategoria_z.getText(), parseDouble(cena_z.getText()))).getIloscPrzedmiotu()+1;
+            Towar towar = admin.wyszukajTowar(nazwa_z.getText(), kategoria_z.getText(), parseDouble(cena_z.getText()));
+            if(ilosc_zam >=2)
+            {
+                sklep.getTowar(sklep.wyszukajTowar(nazwa_z.getText(), kategoria_z.getText(), parseDouble(cena_z.getText()))).zmienIloscPrzedmiotu(ilosc_sklep);
+                zakup.zmienIloscPrzedmiotu(ilosc_zam-1);
+                znalezione_z.setText(towar.nazwa + " w kategorii " + towar.kategoria + " w cenie " + towar.cena + ", dostępna ilość: " + towar.getIloscPrzedmiotu());
+                towary.setAll(sklep.wszystkie_towary);
+                table.setItems(towary);
+                table.refresh();
+                zamowienie.setAll(klient.getKoszyk().getListaZakupow());
+                table_zamowienie.setItems(zamowienie);
+                table_zamowienie.refresh();
+            }
+            else
+            {
+                znalezione_z.setText("Nie można więcej odjąć produktu, usun produkt z koszyka.");
+                zmniejsz_ilosc_z.setVisible(false);
+                zwieksz_ilosc_z.setVisible(false);
+                usun_z_koszyka.setVisible(false);
+                nazwa_z.clear();
+                kategoria_z.clear();
+                cena_z.clear();
+                
+            }
+        });       
+        
         usun_z_koszyka.setOnAction((ActionEvent event) -> {
             if(!nazwa_z.getText().isEmpty() && !kategoria_z.getText().isEmpty() && !cena_z.getText().isEmpty())
             {
@@ -465,6 +541,8 @@ public class JavaFXSklep extends Application {
                     sklep.zwrocWycofane(nazwa_z.getText(), pozycja);
                     zamowienie.setAll(klient.getKoszyk().getListaZakupow());
                     towary.setAll(sklep.wszystkie_towary);
+                    table.setItems(towary);
+                    table.refresh();
                     table_klient_sklep.setItems(towary);
                     table_klient_sklep.refresh();
                     znalezione_z.setText("Usunięto z koszyka.");
@@ -473,6 +551,8 @@ public class JavaFXSklep extends Application {
                 {
                     znalezione_z.setText("Brak podanego przedmiotu w zamówieniu.");
                 }
+                zmniejsz_ilosc_z.setVisible(false);
+                zwieksz_ilosc_z.setVisible(false);
                 usun_z_koszyka.setVisible(false);
             }
             else
